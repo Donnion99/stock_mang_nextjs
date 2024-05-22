@@ -3,35 +3,50 @@ import { useState, useEffect } from "react";
 function Addproduct() {
   const [ProductData, setProductData] = useState({});
   const [Alert, setAlert] = useState("");
+  const [errors, setErrors] = useState({});
 
   const handelchange = (e) => {
     setProductData({ ...ProductData, [e.target.name]: e.target.value });
+    // console.log(ProductData.slug);
+  };
+
+  const validate = () => {
+    let errorss = {};
+    if (!ProductData.slug) errorss.slug = "Product Slug is required";
+    if (!ProductData.quantity) errorss.quantity = "Quantity is required";
+    if (!ProductData.price) errorss.price = "Price is required";
+    setErrors(errorss);
+    // console.log(errorss);
+    setAlert(errorss.slug || errorss.quantity || errorss.price);
+
+    return Object.keys(errorss).length === 0;
   };
 
   const handelsubmit = async (e) => {
     e.preventDefault();
+    if (validate()) {
+      try {
+        const response = await fetch("/api/products", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(ProductData),
+        });
 
-    try {
-      const response = await fetch("/api/products", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(ProductData),
-      });
-
-      if (response.ok) {
-        // console.log("Product added successfully.");
-        setAlert("Product added successfully.");
-        setProductData({});
-        // Optionally, you can reset the htmlForm fields here
-      } else {
-        console.error("Failed to add product.");
-        const errorData = await response.json();
-        console.error("Error:", errorData);
+        if (response.ok) {
+          // console.log("Product added successfully.");
+          setAlert("Product added successfully.");
+          setProductData({});
+          // Optionally, you can reset the htmlForm fields here
+        } else {
+          console.error("Failed to add product.");
+          const errorData = await response.json();
+          console.error("Error:", errorData);
+        }
+      } catch (error) {
+        console.error("Error:", error);
       }
-    } catch (error) {
-      console.error("Error:", error);
     }
   };
 
@@ -42,6 +57,7 @@ function Addproduct() {
           {Alert}
         </div>
       )}
+
       <div className="container mx-auto flex items-center justify-center max-w-7xl">
         <div className="bg-gray-100 p-8 rounded-lg shadow-md w-full ">
           <h1 className="text-3xl font-bold leading-tight mb-6">
