@@ -264,6 +264,13 @@ function Tables() {
             )}
           </div>
           <div className="py-8 overflow-x-auto ">
+            {loading2 && (
+              <div className="container my-4 flex  justify-center  ">
+                <span className="text-black text-lg font-semibold">
+                  Loading...
+                </span>
+              </div>
+            )}
             <table className="min-w-full  leading-normal">
               <thead>
                 <tr>
@@ -287,13 +294,6 @@ function Tables() {
                   </th>
                 </tr>
               </thead>
-              {loading2 && (
-                <div className="container my-4 flex  justify-center  ">
-                  <span className="text-black text-lg font-semibold">
-                    Loading...
-                  </span>
-                </div>
-              )}
               <tbody>
                 {Product.map((product) => {
                   return (
