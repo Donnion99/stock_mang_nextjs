@@ -8,6 +8,7 @@ function Tables() {
   const [Product, setProduct] = useState([]);
   const [dropdown, setdropdown] = useState([]);
   const [loading, setloading] = useState(false);
+  const [loading2, setloading2] = useState(false);
   const [loadingaction, setloadingaction] = useState(false);
   const [loadingtable, setloadingtable] = useState(false);
   const [update, setupdate] = useState("0");
@@ -30,10 +31,12 @@ function Tables() {
 
   useEffect(() => {
     const getdata = async () => {
+      setloading2(true);
       const response = await fetch("/api/products");
       const result = await response.json();
       setProduct(result.Products);
       setloadingtable(false);
+      setloading2(false);
     };
     getdata();
   }, [update]);
@@ -243,6 +246,7 @@ function Tables() {
               onClick={() => {
                 setupdate(update + 1);
                 setloadingtable(true);
+                setProduct([]);
                 // console.log(update);
               }}
             >
@@ -283,6 +287,13 @@ function Tables() {
                   </th>
                 </tr>
               </thead>
+              {loading2 && (
+                <div className="container my-4 flex  justify-center  ">
+                  <span className="text-black text-lg font-semibold">
+                    Loading...
+                  </span>
+                </div>
+              )}
               <tbody>
                 {Product.map((product) => {
                   return (
