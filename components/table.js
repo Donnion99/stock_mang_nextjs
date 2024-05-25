@@ -112,7 +112,7 @@ function Tables() {
             <input
               onChange={handelsearch}
               type="text"
-              placeholder="Search by Name"
+              placeholder="Name search (3+ chars)"
               className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
             />
             <div className="absolute inset-y-0 right-0 flex items-center mb-5 pr-6 ">
